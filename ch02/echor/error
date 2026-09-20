@@ -1,0 +1,9 @@
+   Compiling echor v0.1.0 (/home/buildsystem/Coding/command_line_rust/ch02/echor)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running `target/debug/echor`
+error: the following required arguments were not provided:
+  <TEXT>...
+
+Usage: echor <TEXT>...
+
+For more information, try '--help'.
