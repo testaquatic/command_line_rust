@@ -1,3 +1,8 @@
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
+
 use clap::{Arg, ArgAction, Command};
 
 /// 명령줄 매개변수
@@ -9,6 +14,38 @@ struct Args {
     number_lines: bool,
     /// 빈 줄은 건너 뛰는 줄 번호 표시
     number_nonblank_lines: bool,
+}
+
+fn run(args: Args) -> Result<(), anyhow::Error> {
+    let mut line_num = 1_usize;
+
+    for file_name in &args.files {
+        let file = match open(file_name) {
+            Ok(file) => file,
+            Err(err) => {
+                eprintln!("Failed to open {}: {}", file_name, err);
+                continue;
+            }
+        };
+
+        for line in file.lines() {
+            let line_string = line?;
+            if args.number_lines || (args.number_nonblank_lines && !line_string.is_empty()) {
+                print!("{:>6}\t", line_num);
+                line_num += 1;
+            }
+            println!("{}", line_string);
+        }
+    }
+
+    Ok(())
+}
+
+fn open(filename: &str) -> Result<Box<dyn BufRead>, std::io::Error> {
+    match filename {
+        "-" => Ok(Box::new(BufReader::new(std::io::stdin()))),
+        _ => Ok(Box::new(BufReader::new(File::open(filename)?))),
+    }
 }
 
 fn get_args() -> Args {
@@ -57,5 +94,8 @@ fn get_args() -> Args {
 
 fn main() {
     let args = get_args();
-    println!("{:#?}", args);
+    if let Err(err) = run(args) {
+        eprint!("{}", err);
+        std::process::exit(1);
+    }
 }
