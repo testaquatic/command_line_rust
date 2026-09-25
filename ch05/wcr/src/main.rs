@@ -1,3 +1,8 @@
+use wcr::args::Args;
+
 fn main() {
-    println!("Hello, world!");
+    let args = Args::parse();
+    if let Err(e) = args.run() {
+        eprintln!("{}", e);
+    }
 }
