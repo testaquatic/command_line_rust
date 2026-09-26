@@ -17,16 +17,6 @@ impl Count {
         }
     }
 
-    pub fn max_digit(&self) -> usize {
-        self.lines
-            .unwrap_or(0)
-            .max(self.words.unwrap_or(0))
-            .max(self.bytes.unwrap_or(0))
-            .max(self.chars.unwrap_or(0))
-            .to_string()
-            .len()
-    }
-
     pub fn print_line<T: Write>(&self, filename: &str, writer: &mut T) -> Result<(), io::Error> {
         self.lines
             .map(|line_count| write!(writer, "{:>8}", line_count))
