@@ -142,17 +142,11 @@ fn find_from_path(
 }
 
 fn is_types_match(entry_type: &EntryType, types: &[EntryType]) -> bool {
-    if types.is_empty() {
-        return true;
-    }
-    types.iter().any(|item| entry_type == item)
+    types.is_empty() || types.iter().any(|item| entry_type == item)
 }
 
 fn is_names_match(path: &str, names: &[Regex]) -> bool {
-    if names.is_empty() {
-        return true;
-    }
-    names.iter().any(|regex| regex.is_match(path))
+    names.is_empty() || names.iter().any(|regex| regex.is_match(path))
 }
 
 fn error_printer(path: &Path, result: Result<(), io::Error>) {
